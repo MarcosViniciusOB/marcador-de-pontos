@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcador de Vôlei</title>
+    <link rel="shortcut icon" href="imagens/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="estilos/style.css">
+    <link rel="stylesheet" href="estilos/mediaQuerry.css">
+</head>
+<body>
+
+    <main>
+        <section style="background-color: #5A3DFF;">
+            <div class="team" id="teamA">
+                <h2>
+                    <input type="text" id="teamAName" placeholder="Nome do Time A" value="Time A" />
+                </h2>
+                <h3 id="scoreA">0</h3>
+                <button onclick="addPoint('A')" class="buttonAdd">Adicionar Ponto</button>
+                <button onclick="voltarPonto('A')" class="buttonVol">Voltar Ponto</button>
+            </div>
+        </section>
+
+        <section style="background-color: #ffe83def;">
+            <div class="team" id="teamB">
+                <h2>
+                    <input type="text" id="teamBName" placeholder="Nome do Time B" value="Time B" />
+                </h2>
+                <h3 id="scoreB">0</h3>
+                <button onclick="addPoint('B')" class="buttonAdd">Adicionar Ponto</button>
+                <button onclick="voltarPonto('B')" class="buttonVol">Voltar Ponto</button>
+            </div>
+        </section>
+    </main>
+
+    <div class="message" id="message"></div>
+
+    <script>
+        let pointsA = 0;
+        let pointsB = 0;
+        let timeA = document.getElementById('teamAName').value;
+        let timeB = document.getElementById('teamBName').value;
+
+        function addPoint(team) {
+            if (team === 'A') {
+                pointsA++;
+            } else {
+                pointsB++;
+            }
+
+            //Verificando se algum time já ganhou
+            if(pointsA == 12){
+                alert(`O ${timeA} ganhou!`);
+                pointsA = 0;
+                pointsB = 0;
+            }else{
+                if(pointsB == 12){
+                    alert(`O ${timeB} ganhou!`);
+                    pointsA = 0;
+                    pointsB = 0;
+                }
+            }
+
+            updateDisplay();
+            checkWinner();
+        }
+
+        function voltarPonto(team) {
+            if (team === 'A') {
+                pointsA--;
+            } else {
+                pointsB--;
+            }
+
+            //Verificando se os pontos são negativos
+            if(pointsA < 0){
+                alert("[ATENÇÃO] Não existe pontos negativos");
+                pointsA = 0;
+            }
+            if(pointsB < 0){
+                alert("[ATENÇÃO] Não existe pontos negativos");
+                pointsB = 0;
+            }
+
+            updateDisplay();
+            checkWinner();
+        }
+
+        function resetPoints(team) {
+            if (team === 'A') {
+                pointsA = 0;
+            } else {
+                pointsB = 0;
+            }
+            updateDisplay();
+            document.getElementById('message').innerText = '';
+        }
+
+        function updateDisplay() {
+            document.getElementById('scoreA').innerText = pointsA;
+            document.getElementById('scoreB').innerText = pointsB;
+            document.getElementById('teamA').querySelector('h2').innerText = document.getElementById('teamAName').value || "Time A";
+            document.getElementById('teamB').querySelector('h2').innerText = document.getElementById('teamBName').value || "Time B";
+        }
+
+        function checkWinner() {
+            if (pointsA >= 12) {
+                displayMessage(`${getTeamName('A')} é o vencedor!`);
+                resetGame();
+            } else if (pointsB >= 12) {
+                alert(`${getTeamName('B')} é o vencedor!`);
+                resetGame();
+            }
+        }
+
+        function displayMessage(msg) {
+            document.getElementById('message').innerText = msg;
+        }
+
+        function getTeamName(team) {
+            return document.getElementById(`team${team}Name`).value || `Time ${team}`;
+        }
+
+        function resetGame() {
+            pointsA = 0;
+            pointsB = 0;
+            updateDisplay();
+        }
+    </script>
+
+</body>
+</html>
